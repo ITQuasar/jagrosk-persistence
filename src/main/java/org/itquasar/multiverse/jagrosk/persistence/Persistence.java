@@ -25,6 +25,16 @@ public class Persistence implements AutoCloseable {
         return new Persistence(defaultPUName);
     }
 
+    public <M> Repository getRepository(Class<M> modelClass){
+        return new GenericRepository(modelClass, getEntityManager());
+    }
+
+    public <M> Repository getOneShotRepository(Class<M> modelClass){
+        return new OneShotRepository(
+                new GenericRepository(modelClass, getEntityManager())
+        );
+    }
+
     ///////
     ///////
     ///////

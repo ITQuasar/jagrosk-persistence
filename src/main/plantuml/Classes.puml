@@ -1,0 +1,54 @@
+@startuml
+
+interface Attribute {
+    + name: String
+    + type: Class<?>
+}
+
+interface Entity<I, E extends Entity> {
+    + getID(): I
+    + getIDClass(): Class<I>
+    + getEntityClass() Class<E>
+}
+
+interface Repository<E extends Entity> {
+    + add(E): E
+    + remove(E): boolean
+    + update(E): E
+    + findById(I): Optional<E>
+    + findBy(String, Object): Optional<E>
+}
+
+class OneShotRepository extends Repository {
+    - repository: Repository
+    + OneShotRepository()
+    + OneShotRepository(Repository)
+}
+note bottom of OneShotRepository
+    Operations are atomic and isolated
+    Each save/update are transactioned
+end note
+
+Repository --> Entity
+Repository --> Attribute
+
+'''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''
+'''''''''''''''''''''''''''''''''''''''''''''''''
+
+class Transation {
+    - transactionBody
+    + Transaction(TransationBody)
+    ~ start()
+    ~ end()
+    + execute()
+    + getRepository(Class<? extends Entity>)
+}
+
+class TransationBody {
+    + transaction(Transation)
+}
+
+Transation --> TransationBody
+
+@enduml

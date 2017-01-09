@@ -11,29 +11,29 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by guilherme on 16/10/16.
  */
-public class Persistence implements AutoCloseable {
+public class JPAPersistenceProvider implements AutoCloseable {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Persistence.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JPAPersistenceProvider.class);
 
     private static final String DEFAULT_PU_NAME = "default";
 
-    public static Persistence create(){
+    public static JPAPersistenceProvider create(){
         return create(DEFAULT_PU_NAME);
     }
 
-    public static Persistence create(String defaultPUName){
-        return new Persistence(defaultPUName);
+    public static JPAPersistenceProvider create(String defaultPUName){
+        return new JPAPersistenceProvider(defaultPUName);
     }
 
-    public <M> Repository getRepository(Class<M> modelClass){
-        return new GenericRepository(modelClass, getEntityManager());
-    }
-
-    public <M> Repository getOneShotRepository(Class<M> modelClass){
-        return new OneShotRepository(
-                new GenericRepository(modelClass, getEntityManager())
-        );
-    }
+//    public <M> Repository getRepository(Class<M> modelClass){
+//        return new GenericRepository(modelClass, getEntityManager());
+//    }
+//
+//    public <M> Repository getOneShotRepository(Class<M> modelClass){
+//        return new OneShotRepository(
+//                new GenericRepository(modelClass, getEntityManager())
+//        );
+//    }
 
     ///////
     ///////
@@ -43,7 +43,7 @@ public class Persistence implements AutoCloseable {
             new ConcurrentHashMap<String, EntityManagerFactory>();
     private final String defaultPuName;
 
-    private Persistence(String defaultPUName) {
+    private JPAPersistenceProvider(String defaultPUName) {
         this.defaultPuName = defaultPUName;
     }
 

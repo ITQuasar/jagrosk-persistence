@@ -1,25 +1,54 @@
 @startuml
 
-interface Attribute {
-    + name: String
+class PersistenceUnit {
+    + getRepository(E extends Entity): Repository
+}
+PersistenceUnit --> Repository
+
+interface EntityAttribute {
+    + fooBar: String
     + type: Class<?>
 }
 
-interface Entity<I, E extends Entity> {
+interface Entity <I> {
+    '<I, E extends Entity> {
     + getID(): I
-    + getIDClass(): Class<I>
-    + getEntityClass() Class<E>
+    + identityEquals(Entity<I>)
+    + identityHashCode()
+    '+ getIDClass(): Class<I>
+    '+ getEntityClass() Class<E>
+}
+
+class RepositoryResult<I, E extends Entity<I>> {
+    + repository: Repository<I, E>
+    + success: boolean
+    + message: String, ""
 }
 
 interface Repository<E extends Entity> {
-    + add(E): E
-    + remove(E): boolean
-    + update(E): E
+    + add(E): RepositoryResult<I, E>
+    + remove(I): RepositoryResult<I, E>
+    + update(E): RepositoryResult<I, E>
+    + listAll(): List<E>
+    ===
     + findById(I): Optional<E>
-    + findBy(String, Object): Optional<E>
+    + findBy(String, Object): List<E>
+    + findBy(RepositoryPredicate): List<E>
+}
+
+enum PredicateOperation {
+  AND, OR
+  EQUALS, IN, NOT, LIKE, ILIKE
+  LT, LE, GT, GE
+}
+
+interface RepositoryPredicate<?> {
+    + operation: PredicateOperation
+    + value: ?
 }
 
 class OneShotRepository extends Repository {
+    MUST HAVE A TRANSACTION INSIDE
     - repository: Repository
     + OneShotRepository()
     + OneShotRepository(Repository)
@@ -29,26 +58,57 @@ note bottom of OneShotRepository
     Each save/update are transactioned
 end note
 
-Repository --> Entity
-Repository --> Attribute
+RepositoryPredicate -> PredicateOperation
+Repository ----> RepositoryResult
+Repository -> RepositoryPredicate
+Repository --> EntityAttribute
+Repository ---> Entity
+
+
+class DBRepository extends Repository
+class JPARepository extends DBRepository {
+  + findBy(Attribute, Object): Optional<E>
+}
+'class HibernateRepository extends DBRepository
+
+enum FileHandler {
+  JSON, YAML, XML, ...
+}
+
+class FileRepository extends Repository {
+  + fileHandler: FileHandler
+}
+
+FileRepository --> FileHandler
+
+
+'class JSONRepository extends FileRepository
+'class YAMLRepository extends FileRepository
+'class XMLRepository extends FileRepository
 
 '''''''''''''''''''''''''''''''''''''''''''''''''
 '''''''''''''''''''''''''''''''''''''''''''''''''
 '''''''''''''''''''''''''''''''''''''''''''''''''
 
-class Transation {
+interface Transaction {
     - transactionBody
-    + Transaction(TransationBody)
+    + Transaction(TransactionBody)
     ~ start()
     ~ end()
     + execute()
     + getRepository(Class<? extends Entity>)
 }
 
-class TransationBody {
-    + transaction(Transation)
+interface TransactionBody {
+    + transaction(Transaction)
 }
 
-Transation --> TransationBody
+Transaction --> TransactionBody
+
+interface DBTransaction extends Transaction
+class JPATransaction extends DBTransaction
+'class HibernateTransaction extends DBTransaction
+
+class FileTransaction extends Transaction
 
 @enduml

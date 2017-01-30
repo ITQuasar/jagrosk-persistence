@@ -1,5 +1,6 @@
 package org.itquasar.multiverse.jagrosk.persistence;
 
+import org.itquasar.multiverse.jagrosk.persistence.mem.MemoryRepository;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

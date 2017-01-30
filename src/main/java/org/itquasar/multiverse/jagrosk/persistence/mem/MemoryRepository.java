@@ -1,4 +1,7 @@
-package org.itquasar.multiverse.jagrosk.persistence;
+package org.itquasar.multiverse.jagrosk.persistence.mem;
+
+import org.itquasar.multiverse.jagrosk.persistence.Entity;
+import org.itquasar.multiverse.jagrosk.persistence.Repository;
 
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -23,23 +26,26 @@ public class MemoryRepository<I, E extends Entity<I>> implements Repository<I, E
     }
 
     @Override
-    public RepositoryResult<I, E> add(E entity) {
-        this.storage.put(entity.getId(), entity);
-        return RepositoryResult.success(this);
+    public Optional<E> add(E entity) {
+        return Optional.of(
+                this.storage.put(entity.getId(), entity)
+        );
     }
 
     @Override
-    public RepositoryResult<I, E> remove(I id) {
-        return this.storage.remove(this.storage.get(id)).getId().equals(id)
-                ? RepositoryResult.success(this)
-                : RepositoryResult.failure(this, "Error removing entity with given id " + id);
+    public Optional<E> remove(E entity) {
+        Objects.requireNonNull(entity, "Entity must be not null to be removed from persistence.");
+        I id = entity.getId();
+        return Optional.of(
+                this.storage.remove(this.storage.get(id))
+        );
     }
 
     @Override
-    public RepositoryResult<I, E> update(E entity) {
-        return this.storage.replace(entity.getId(), entity) != null
-                ? RepositoryResult.success(this)
-                : RepositoryResult.failure(this, "Error updating given entity #" + entity.getId());
+    public Optional<E> update(E entity) {
+        return Optional.of(
+                this.storage.replace(entity.getId(), entity)
+        );
     }
 
     @Override
@@ -81,7 +87,7 @@ public class MemoryRepository<I, E extends Entity<I>> implements Repository<I, E
     }
 
     @Override
-    public Optional<E> findBy(RepositoryPredicate predicate) {
-        return null;
+    public void close() {
+        this.storage.clear();
     }
 }

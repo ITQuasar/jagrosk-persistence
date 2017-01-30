@@ -44,20 +44,20 @@ public class JPARepository<I, E extends Entity<I>> implements Repository<I, E> {
     @Override
     public Optional<E> add(E entity) {
         this.entityManager.persist(entity);
-        return Optional.of(entity);
+        return Optional.ofNullable(entity);
     }
 
     @Override
     public Optional<E> remove(E entity) {
         this.entityManager.remove(entity);
-        return Optional.of(entity);
+        return Optional.ofNullable(entity);
     }
 
     @Override
     public Optional<E> update(E entity) {
         this.entityManager.merge(entity);
         this.entityManager.persist(entity);
-        return Optional.of(entity);
+        return Optional.ofNullable(entity);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class JPARepository<I, E extends Entity<I>> implements Repository<I, E> {
 
     @Override
     public Optional<E> findById(I id) {
-        return Optional.of(
+        return Optional.ofNullable(
                 this.entityManager.find(this.entityClass, id)
         );
     }

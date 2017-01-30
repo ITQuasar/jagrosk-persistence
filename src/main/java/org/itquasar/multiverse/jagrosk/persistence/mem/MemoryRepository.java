@@ -27,7 +27,7 @@ public class MemoryRepository<I, E extends Entity<I>> implements Repository<I, E
 
     @Override
     public Optional<E> add(E entity) {
-        return Optional.of(
+        return Optional.ofNullable(
                 this.storage.put(entity.getId(), entity)
         );
     }
@@ -36,14 +36,14 @@ public class MemoryRepository<I, E extends Entity<I>> implements Repository<I, E
     public Optional<E> remove(E entity) {
         Objects.requireNonNull(entity, "Entity must be not null to be removed from persistence.");
         I id = entity.getId();
-        return Optional.of(
+        return Optional.ofNullable(
                 this.storage.remove(this.storage.get(id))
         );
     }
 
     @Override
     public Optional<E> update(E entity) {
-        return Optional.of(
+        return Optional.ofNullable(
                 this.storage.replace(entity.getId(), entity)
         );
     }

@@ -3,6 +3,7 @@ package org.itquasar.multiverse.jagrosk.persistence.jpa;
 import org.itquasar.multiverse.jagrosk.persistence.Entity;
 import org.itquasar.multiverse.jagrosk.persistence.JagroskPersistenceProvider;
 import org.itquasar.multiverse.jagrosk.persistence.Repository;
+import org.itquasar.multiverse.jagrosk.persistence.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,5 +79,30 @@ public class JPAPersistenceProvider implements JagroskPersistenceProvider, AutoC
     @Override
     public <I, E extends Entity<I>> Repository<I, E> buildOneShotRepository(Class<E> entityClass) {
         return new JPAOneShotRepository<>((JPARepository) buildRepository(entityClass));
+    }
+
+    @Override
+    public <T> Transaction<T> createTransaction() {
+        return new Transaction<T>(this) {
+            @Override
+            protected void begin() {
+                throw new RuntimeException("Not implemented yet!");
+            }
+
+            @Override
+            protected void commit() throws Exception {
+                throw new RuntimeException("Not implemented yet!");
+            }
+
+            @Override
+            protected void rollback() {
+                throw new RuntimeException("Not implemented yet!");
+            }
+
+            @Override
+            protected void finalizeResources() {
+                throw new RuntimeException("Not implemented yet!");
+            }
+        };
     }
 }

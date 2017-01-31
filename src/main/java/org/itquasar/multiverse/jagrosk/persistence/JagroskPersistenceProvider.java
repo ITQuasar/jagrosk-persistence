@@ -3,7 +3,6 @@ package org.itquasar.multiverse.jagrosk.persistence;
 /**
  * Created by guilherme on 29/01/17.
  */
-@FunctionalInterface
 public interface JagroskPersistenceProvider {
 
     <I, E extends Entity<I>> Repository<I, E > buildRepository(Class<E> entityClass);
@@ -13,6 +12,8 @@ public interface JagroskPersistenceProvider {
     }
 
     default <I, E extends Entity<I>> Repository<I, E > buildOneShotRepository(Class<E> entityClass){
-        return new OneShotRepository<I, E>(buildRepository(entityClass));
+        return new OneShotRepository<>(buildRepository(entityClass));
     }
+
+    <T> Transaction<T> createTransaction();
 }

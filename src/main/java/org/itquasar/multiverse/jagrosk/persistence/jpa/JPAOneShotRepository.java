@@ -2,11 +2,11 @@ package org.itquasar.multiverse.jagrosk.persistence.jpa;
 
 import org.itquasar.multiverse.jagrosk.persistence.JagroskEntity;
 import org.itquasar.multiverse.jagrosk.persistence.OneShotRepository;
-import org.itquasar.multiverse.jagrosk.persistence.RepositoryAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityTransaction;
+import java.util.function.Supplier;
 
 /**
  * Created by guilherme on 29/01/17.
@@ -24,12 +24,12 @@ public class JPAOneShotRepository<I, E extends JagroskEntity<I>> extends OneShot
     }
 
     @Override
-    protected <T> T performAndReturn(RepositoryAction<T> action) {
+    protected <T> T performAndReturn(Supplier<T> action) {
         T result = null;
         EntityTransaction trx = getRepository().getEntityManager().getTransaction();
         try {
             trx.begin();
-            result = action.execute();
+            result = action.get();
             trx.commit();
         } catch (Exception ex) {
             if (trx.isActive()) {

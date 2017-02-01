@@ -20,8 +20,13 @@ public interface Repository<I, E extends JagroskEntity<I>> extends AutoCloseable
 
     List<E> findBy(String propertyName, Object value);
 
-    @WorkInProgress
-    default List<E> findBy(RepositoryPredicate predicate) {
+    /**
+     * API not defined
+     * @param predicate
+     * @return
+     */
+    @Deprecated
+    default List<E> findBy(JagroskPredicate predicate) {
         throw new RuntimeException("API not defined yet!");
     }
 

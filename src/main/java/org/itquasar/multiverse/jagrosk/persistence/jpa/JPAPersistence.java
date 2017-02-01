@@ -72,17 +72,17 @@ public class JPAPersistence implements JagroskPersistence, AutoCloseable {
 
 
     @Override
-    public <I, E extends JagroskEntity<I>> Repository<I, E> buildRepository(Class<E> entityClass) {
+    public <I, E extends JagroskEntity<I>> Repository<I, E> repository(Class<E> entityClass) {
         return new JPARepository<>(this.getEntityManager(), entityClass);
     }
 
     @Override
-    public <I, E extends JagroskEntity<I>> Repository<I, E> buildOneShotRepository(Class<E> entityClass) {
-        return new JPAOneShotRepository<>((JPARepository) buildRepository(entityClass));
+    public <I, E extends JagroskEntity<I>> Repository<I, E> repositoryOneShot(Class<E> entityClass) {
+        return new JPAOneShotRepository<>((JPARepository) repository(entityClass));
     }
 
     @Override
-    public <T> Transaction<T> createTransaction() {
+    public <T> Transaction<T> transaction() {
         return new JPATransaction(this);
     }
 }

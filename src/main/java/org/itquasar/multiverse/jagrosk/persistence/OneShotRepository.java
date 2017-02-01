@@ -2,6 +2,7 @@ package org.itquasar.multiverse.jagrosk.persistence;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * Created by guilherme on 29/01/17.
@@ -14,8 +15,8 @@ public class OneShotRepository<I, E extends JagroskEntity<I>> implements Reposit
         this.repository = repository;
     }
 
-    protected <T> T performAndReturn(RepositoryAction<T> action){
-        T t = action.execute();
+    protected <T> T performAndReturn(Supplier<T> action){
+        T t = action.get();
         this.close();
         return t;
     }
@@ -51,7 +52,7 @@ public class OneShotRepository<I, E extends JagroskEntity<I>> implements Reposit
     }
 
     @Override
-    public List<E> findBy(RepositoryPredicate predicate) {
+    public List<E> findBy(JagroskPredicate predicate) {
         return performAndReturn(() -> this.repository.findBy(predicate));
     }
 

@@ -29,7 +29,7 @@ public abstract class Transaction<R> {
     protected abstract void finalizeResources();
 
     public <I, E extends JagroskEntity<I>> Repository<I,E> getRepository(Class<E> entityClass){
-        return persistence.buildRepository(entityClass, false);
+        return persistence.repository(entityClass, false);
     }
 
     public Optional<R> perform(Function<Transaction<R>, R> body){

@@ -10,12 +10,12 @@ import org.itquasar.multiverse.jagrosk.persistence.Transaction;
  */
 public class MemoryPersistence implements JagroskPersistence {
     @Override
-    public <I, E extends JagroskEntity<I>> Repository<I, E> buildRepository(Class<E> entityClass) {
+    public <I, E extends JagroskEntity<I>> Repository<I, E> repository(Class<E> entityClass) {
         return new MemoryRepository<>(entityClass);
     }
 
     @Override
-    public <T> Transaction<T> createTransaction() {
+    public <T> Transaction<T> transaction() {
         return new Transaction<T>(this) {
 
             private boolean isActive = false;

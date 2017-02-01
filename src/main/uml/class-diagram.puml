@@ -1,0 +1,37 @@
+@startuml
+abstract class org.itquasar.multiverse.jagrosk.persistence.Transaction
+class org.itquasar.multiverse.jagrosk.persistence.JagroskPersistenceFactory
+class org.itquasar.multiverse.jagrosk.persistence.OneShotRepository
+class org.itquasar.multiverse.jagrosk.persistence.jpa.JPAOneShotRepository
+class org.itquasar.multiverse.jagrosk.persistence.jpa.JPAPersistence
+class org.itquasar.multiverse.jagrosk.persistence.jpa.JPAQuery
+class org.itquasar.multiverse.jagrosk.persistence.jpa.JPARepository
+class org.itquasar.multiverse.jagrosk.persistence.jpa.JPATransaction
+class org.itquasar.multiverse.jagrosk.persistence.mem.MemoryPersistence
+class org.itquasar.multiverse.jagrosk.persistence.mem.MemoryRepository
+enum org.itquasar.multiverse.jagrosk.persistence.JagroskPersistenceType
+interface org.itquasar.multiverse.jagrosk.persistence.JagroskEntity
+interface org.itquasar.multiverse.jagrosk.persistence.JagroskPersistence
+interface org.itquasar.multiverse.jagrosk.persistence.JagroskPersistenceOptions
+interface org.itquasar.multiverse.jagrosk.persistence.JagroskPredicate
+interface org.itquasar.multiverse.jagrosk.persistence.Repository
+org.itquasar.multiverse.jagrosk.persistence.JagroskPersistenceFactory ..> org.itquasar.multiverse.jagrosk.persistence.jpa.JPAPersistence
+org.itquasar.multiverse.jagrosk.persistence.JagroskPersistenceFactory ..> org.itquasar.multiverse.jagrosk.persistence.mem.MemoryPersistence
+org.itquasar.multiverse.jagrosk.persistence.OneShotRepository --|> org.itquasar.multiverse.jagrosk.persistence.Repository
+org.itquasar.multiverse.jagrosk.persistence.jpa.JPAOneShotRepository --|> org.itquasar.multiverse.jagrosk.persistence.OneShotRepository
+org.itquasar.multiverse.jagrosk.persistence.jpa.JPAOneShotRepository ..> org.itquasar.multiverse.jagrosk.persistence.JagroskEntity
+org.itquasar.multiverse.jagrosk.persistence.jpa.JPAPersistence ..> org.itquasar.multiverse.jagrosk.persistence.Transaction
+org.itquasar.multiverse.jagrosk.persistence.jpa.JPAPersistence ..> org.itquasar.multiverse.jagrosk.persistence.JagroskEntity
+org.itquasar.multiverse.jagrosk.persistence.jpa.JPAPersistence ..> org.itquasar.multiverse.jagrosk.persistence.JagroskPersistence
+org.itquasar.multiverse.jagrosk.persistence.jpa.JPAPersistence ..> org.itquasar.multiverse.jagrosk.persistence.Repository
+org.itquasar.multiverse.jagrosk.persistence.jpa.JPAQuery ..> org.itquasar.multiverse.jagrosk.persistence.JagroskEntity
+org.itquasar.multiverse.jagrosk.persistence.jpa.JPARepository ..> org.itquasar.multiverse.jagrosk.persistence.JagroskEntity
+org.itquasar.multiverse.jagrosk.persistence.jpa.JPARepository --|> org.itquasar.multiverse.jagrosk.persistence.Repository
+org.itquasar.multiverse.jagrosk.persistence.jpa.JPATransaction --|> org.itquasar.multiverse.jagrosk.persistence.Transaction
+org.itquasar.multiverse.jagrosk.persistence.mem.MemoryPersistence ..> org.itquasar.multiverse.jagrosk.persistence.Transaction
+org.itquasar.multiverse.jagrosk.persistence.mem.MemoryPersistence ..> org.itquasar.multiverse.jagrosk.persistence.JagroskEntity
+org.itquasar.multiverse.jagrosk.persistence.mem.MemoryPersistence --|> org.itquasar.multiverse.jagrosk.persistence.JagroskPersistence
+org.itquasar.multiverse.jagrosk.persistence.mem.MemoryPersistence ..> org.itquasar.multiverse.jagrosk.persistence.Repository
+org.itquasar.multiverse.jagrosk.persistence.mem.MemoryRepository ..> org.itquasar.multiverse.jagrosk.persistence.JagroskEntity
+org.itquasar.multiverse.jagrosk.persistence.mem.MemoryRepository --|> org.itquasar.multiverse.jagrosk.persistence.Repository
+@enduml

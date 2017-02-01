@@ -124,6 +124,60 @@
                 <!--</configuration>-->
             </plugin>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.5.0</version>
+                <configuration>
+                    <includePluginDependencies>true</includePluginDependencies>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>net.sourceforge.plantuml-depend</groupId>
+                        <artifactId>plantuml-dependency-cli</artifactId>
+                        <version>1.4.0</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>net.sourceforge.plantuml</groupId>
+                        <artifactId>plantuml</artifactId>
+                        <version>8054</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>plantuml-dependency</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>net.sourceforge.plantumldependency.cli.main.program.PlantUMLDependencyProgram</mainClass>
+                            <arguments>
+                                <argument>-o</argument>
+                                <argument>${project.basedir}/src/main/uml/class-diagram.puml</argument>
+                                <argument>-dp</argument>
+                                <argument>org.itquasar.*</argument>
+                                <argument>-e</argument>
+                                <argument>**/*Test.java,**/FooBarEntity.java</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>plantuml</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>net.sourceforge.plantuml.Run</mainClass>
+                            <arguments>
+                                <argument>${project.basedir}/src/main/uml/*uml</argument>
+                                <argument>-tsvg</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>com.github.jeluard</groupId>
                 <artifactId>plantuml-maven-plugin</artifactId>
                 <version>1.2</version>

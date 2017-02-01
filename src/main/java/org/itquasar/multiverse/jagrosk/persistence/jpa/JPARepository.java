@@ -1,6 +1,6 @@
 package org.itquasar.multiverse.jagrosk.persistence.jpa;
 
-import org.itquasar.multiverse.jagrosk.persistence.Entity;
+import org.itquasar.multiverse.jagrosk.persistence.JagroskEntity;
 import org.itquasar.multiverse.jagrosk.persistence.Repository;
 
 import javax.persistence.EntityManager;
@@ -13,7 +13,7 @@ import java.util.Optional;
 /**
  * Created by guilherme on 29/01/17.
  */
-public class JPARepository<I, E extends Entity<I>> implements Repository<I, E> {
+public class JPARepository<I, E extends JagroskEntity<I>> implements Repository<I, E> {
 
     private final EntityManager entityManager;
     private final Class<E> entityClass;
@@ -95,5 +95,10 @@ public class JPARepository<I, E extends Entity<I>> implements Repository<I, E> {
     @Override
     public void close() {
         this.entityManager.close();
+    }
+
+    @Override
+    public EntityManager unwrap() {
+        return this.getEntityManager();
     }
 }

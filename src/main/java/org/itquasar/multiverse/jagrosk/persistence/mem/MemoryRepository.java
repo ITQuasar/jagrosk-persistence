@@ -1,6 +1,6 @@
 package org.itquasar.multiverse.jagrosk.persistence.mem;
 
-import org.itquasar.multiverse.jagrosk.persistence.Entity;
+import org.itquasar.multiverse.jagrosk.persistence.JagroskEntity;
 import org.itquasar.multiverse.jagrosk.persistence.Repository;
 
 import java.beans.IntrospectionException;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 /**
  * Created by guilherme on 08/01/17.
  */
-public class MemoryRepository<I, E extends Entity<I>> implements Repository<I, E> {
+public class MemoryRepository<I, E extends JagroskEntity<I>> implements Repository<I, E> {
 
     private final Map<I, E> storage = new ConcurrentHashMap<I, E>();
 
@@ -89,5 +89,10 @@ public class MemoryRepository<I, E extends Entity<I>> implements Repository<I, E
     @Override
     public void close() {
         this.storage.clear();
+    }
+
+    @Override
+    public Map<I, E> unwrap() {
+        return storage;
     }
 }

@@ -6,7 +6,7 @@ import java.util.Optional;
 /**
  * Created by guilherme on 29/01/17.
  */
-public class OneShotRepository<I, E extends Entity<I>> implements Repository<I, E>{
+public class OneShotRepository<I, E extends JagroskEntity<I>> implements Repository<I, E>{
 
     protected final Repository<I, E> repository;
 
@@ -58,5 +58,10 @@ public class OneShotRepository<I, E extends Entity<I>> implements Repository<I, 
     @Override
     public void close() {
         this.repository.close();
+    }
+
+    @Override
+    public Repository<I, E> unwrap() {
+        return this.repository;
     }
 }

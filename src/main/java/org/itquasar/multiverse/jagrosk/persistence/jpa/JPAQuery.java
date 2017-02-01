@@ -1,6 +1,6 @@
 package org.itquasar.multiverse.jagrosk.persistence.jpa;
 
-import org.itquasar.multiverse.jagrosk.persistence.Entity;
+import org.itquasar.multiverse.jagrosk.persistence.JagroskEntity;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -11,10 +11,10 @@ import javax.persistence.criteria.Root;
 /**
  * Created by guilherme on 29/01/17.
  */
-public class JPAQuery<I, E extends Entity<I>> {
+public class JPAQuery<I, E extends JagroskEntity<I>> {
 
 
-    public static <I, E extends Entity<I>> TypedQuery<E> listAllQuery(EntityManager entityManager, Class<E> entityClass){
+    public static <I, E extends JagroskEntity<I>> TypedQuery<E> listAllQuery(EntityManager entityManager, Class<E> entityClass){
         return new JPAQuery<>(entityManager, entityClass).toTypedQuery();
     }
 

@@ -1,7 +1,7 @@
 package org.itquasar.multiverse.jagrosk.persistence.jpa;
 
-import org.itquasar.multiverse.jagrosk.persistence.Entity;
-import org.itquasar.multiverse.jagrosk.persistence.JagroskPersistenceProvider;
+import org.itquasar.multiverse.jagrosk.persistence.JagroskEntity;
+import org.itquasar.multiverse.jagrosk.persistence.JagroskPersistence;
 import org.itquasar.multiverse.jagrosk.persistence.Repository;
 import org.itquasar.multiverse.jagrosk.persistence.Transaction;
 import org.slf4j.Logger;
@@ -15,9 +15,9 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Created by guilherme on 16/10/16.
  */
-public class JPAPersistenceProvider implements JagroskPersistenceProvider, AutoCloseable {
+public class JPAPersistence implements JagroskPersistence, AutoCloseable {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JPAPersistenceProvider.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JPAPersistence.class);
 
     private static final String DEFAULT_PU_NAME = "default";
 
@@ -27,16 +27,16 @@ public class JPAPersistenceProvider implements JagroskPersistenceProvider, AutoC
     // ---------------------------------------- //
     private final String puName;
 
-    private JPAPersistenceProvider(String puName) {
+    private JPAPersistence(String puName) {
         this.puName = puName;
     }
 
-    public static JPAPersistenceProvider create() {
+    public static JPAPersistence create() {
         return create(DEFAULT_PU_NAME);
     }
 
-    public static JPAPersistenceProvider create(String defaultPUName) {
-        return new JPAPersistenceProvider(defaultPUName);
+    public static JPAPersistence create(String defaultPUName) {
+        return new JPAPersistence(defaultPUName);
     }
 
     private static EntityManager getEntityManager(String name) {
@@ -72,37 +72,17 @@ public class JPAPersistenceProvider implements JagroskPersistenceProvider, AutoC
 
 
     @Override
-    public <I, E extends Entity<I>> Repository<I, E> buildRepository(Class<E> entityClass) {
+    public <I, E extends JagroskEntity<I>> Repository<I, E> buildRepository(Class<E> entityClass) {
         return new JPARepository<>(this.getEntityManager(), entityClass);
     }
 
     @Override
-    public <I, E extends Entity<I>> Repository<I, E> buildOneShotRepository(Class<E> entityClass) {
+    public <I, E extends JagroskEntity<I>> Repository<I, E> buildOneShotRepository(Class<E> entityClass) {
         return new JPAOneShotRepository<>((JPARepository) buildRepository(entityClass));
     }
 
     @Override
     public <T> Transaction<T> createTransaction() {
-        return new Transaction<T>(this) {
-            @Override
-            protected void begin() {
-                throw new RuntimeException("Not implemented yet!");
-            }
-
-            @Override
-            protected void commit() throws Exception {
-                throw new RuntimeException("Not implemented yet!");
-            }
-
-            @Override
-            protected void rollback() {
-                throw new RuntimeException("Not implemented yet!");
-            }
-
-            @Override
-            protected void finalizeResources() {
-                throw new RuntimeException("Not implemented yet!");
-            }
-        };
+        return new JPATransaction(this);
     }
 }

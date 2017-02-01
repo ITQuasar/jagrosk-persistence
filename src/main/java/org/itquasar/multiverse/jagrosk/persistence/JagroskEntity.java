@@ -23,11 +23,11 @@ import java.util.Objects;
  * }
  * ```
  */
-public interface Entity<I> {
+public interface JagroskEntity<I> {
 
     I getId();
 
-    default boolean identityEquals(Entity<I> other) {
+    default boolean identityEquals(JagroskEntity<I> other) {
         return this.getClass().isInstance(other) && Objects.equals(this.getId(), other.getId());
     }
 

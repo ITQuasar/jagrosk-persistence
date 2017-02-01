@@ -1,6 +1,6 @@
 package org.itquasar.multiverse.jagrosk.persistence.jpa;
 
-import org.itquasar.multiverse.jagrosk.persistence.Entity;
+import org.itquasar.multiverse.jagrosk.persistence.JagroskEntity;
 import org.itquasar.multiverse.jagrosk.persistence.OneShotRepository;
 import org.itquasar.multiverse.jagrosk.persistence.RepositoryAction;
 import org.slf4j.Logger;
@@ -11,7 +11,7 @@ import javax.persistence.EntityTransaction;
 /**
  * Created by guilherme on 29/01/17.
  */
-public class JPAOneShotRepository<I, E extends Entity<I>> extends OneShotRepository<I, E> {
+public class JPAOneShotRepository<I, E extends JagroskEntity<I>> extends OneShotRepository<I, E> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JPAOneShotRepository.class);
 

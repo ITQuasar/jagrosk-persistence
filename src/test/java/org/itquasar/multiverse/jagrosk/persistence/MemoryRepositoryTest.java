@@ -14,16 +14,16 @@ import static org.hamcrest.Matchers.is;
 public class MemoryRepositoryTest {
 
 
-    private static final Repository<Integer, EntityTest.TestEntity> REPOSITORY = new MemoryRepository<>(EntityTest.TestEntity.class);
+    private static final Repository<Integer, FooBarEntity> REPOSITORY = new MemoryRepository<>(FooBarEntity.class);
 
 
     @Test
     public void manipulateEntityID1(){
-        REPOSITORY.add(new EntityTest.TestEntity(1));
-        EntityTest.TestEntity e = REPOSITORY.findById(1).get();
+        REPOSITORY.add(new FooBarEntity(1));
+        FooBarEntity e = REPOSITORY.findById(1).get();
         e.setFooBar("FOO BAR");
         REPOSITORY.update(e);
-        List<EntityTest.TestEntity> list = REPOSITORY.findBy("fooBar", "FOO BAR");
+        List<FooBarEntity> list = REPOSITORY.findBy("fooBar", "FOO BAR");
 
         assertThat(e.getFooBar(), is("FOO BAR"));
         assertThat(list.size(), is(1));

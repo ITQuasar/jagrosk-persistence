@@ -8,13 +8,19 @@ import java.util.function.Function;
  */
 public abstract class Transaction<R> {
 
-    private final JagroskPersistenceProvider provider;
+    private final JagroskPersistence persistence;
 
-    public Transaction(JagroskPersistenceProvider provider) {
-        this.provider = provider;
+    public Transaction(JagroskPersistence persistence) {
+        this.persistence = persistence;
+    }
+
+    public JagroskPersistence getPersistence() {
+        return persistence;
     }
 
     protected abstract void begin();
+
+    protected abstract boolean isActive();
 
     protected abstract void commit() throws Exception;
 
@@ -22,8 +28,8 @@ public abstract class Transaction<R> {
 
     protected abstract void finalizeResources();
 
-    public <I, E extends Entity<I>> Repository<I,E> getRepository(Class<E> entityClass){
-        return provider.buildRepository(entityClass, false);
+    public <I, E extends JagroskEntity<I>> Repository<I,E> getRepository(Class<E> entityClass){
+        return persistence.buildRepository(entityClass, false);
     }
 
     public Optional<R> perform(Function<Transaction<R>, R> body){

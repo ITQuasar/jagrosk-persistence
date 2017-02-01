@@ -6,7 +6,7 @@ import java.util.Optional;
 /**
  * Created by guilherme on 16/10/16.
  */
-public interface Repository<I, E extends Entity<I>> extends AutoCloseable {
+public interface Repository<I, E extends JagroskEntity<I>> extends AutoCloseable {
 
     Optional<E> add(E entity);
 
@@ -27,4 +27,6 @@ public interface Repository<I, E extends Entity<I>> extends AutoCloseable {
 
     @Override
     void close();
+
+    Object unwrap();
 }

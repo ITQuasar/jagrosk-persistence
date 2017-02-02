@@ -17,4 +17,18 @@
             <property name="hibernate.hbm2ddl.auto" value="create" />
         </properties>
     </persistence-unit>
+    <persistence-unit name="test-roolback">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <jar-file>.</jar-file>
+        <properties>
+            <!-- connection -->
+            <property name="javax.persistence.jdbc.driver" value="org.h2.Driver" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:jagrosk_rollback_test" />
+            <!--  hibernate properties -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
+            <property name="hibernate.show_sql" value="false" />
+            <property name="hibernate.format_sql" value="true" />
+            <property name="hibernate.hbm2ddl.auto" value="create" />
+        </properties>
+    </persistence-unit>
 </persistence>

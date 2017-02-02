@@ -40,7 +40,7 @@ public class JPATransaction<R> extends Transaction<R> {
     }
 
     @Override
-    protected void commit() throws Exception {
+    protected void commit() throws Throwable {
         this.transaction.commit();
     }
 

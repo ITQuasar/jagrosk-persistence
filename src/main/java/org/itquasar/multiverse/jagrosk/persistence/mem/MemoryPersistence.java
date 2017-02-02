@@ -14,7 +14,9 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class MemoryPersistence implements JagroskPersistence {
 
-    private final DB db = DBMaker.memoryDB().make();
+    private final DB db = DBMaker.memoryDB()
+            .transactionEnable()
+            .make();
 
     @Override
     public <I, E extends JagroskEntity<I>> Repository<I, E> repository(Class<E> entityClass) {
@@ -24,47 +26,7 @@ public class MemoryPersistence implements JagroskPersistence {
 
     @Override
     public <T> Transaction<T> transaction() {
-        // FIXME
-        return new Transaction<T>(this) {
-
-            private final RepositoryProvider repositoryProvider = new RepositoryProvider() {
-                @Override
-                public <I, E extends JagroskEntity<I>> Repository<I, E> get(Class<E> entityClass) {
-                    return getPersistence().repository(entityClass, false);
-                }
-            };
-
-            private boolean isActive = false;
-
-            @Override
-            protected void begin() {
-                this.isActive = true;
-            }
-
-            @Override
-            protected boolean isActive() {
-                return isActive;
-            }
-
-            @Override
-            protected void commit() throws Exception {
-                this.isActive = false;
-            }
-
-            @Override
-            protected void rollback() {
-                this.isActive = false;
-            }
-
-            @Override
-            protected void finalizeResources() {
-                this.isActive = false;
-            }
-
-            @Override
-            protected RepositoryProvider getRepositoryProvider() {
-                return repositoryProvider;
-            }
-        };
+        return new MemoryTransaction<>(db, this);
     }
+
 }

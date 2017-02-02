@@ -9,7 +9,7 @@ import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
 /**
@@ -17,11 +17,12 @@ import java.util.stream.Collectors;
  */
 public class MemoryRepository<I, E extends JagroskEntity<I>> implements Repository<I, E> {
 
-    private final Map<I, E> storage = new ConcurrentHashMap<I, E>();
+    private final ConcurrentMap <I, E> storage;
 
     private final Class<E> entityClass;
 
-    public MemoryRepository(Class<E> entityClass) {
+    public MemoryRepository(ConcurrentMap <I, E> storage, Class<E> entityClass) {
+        this.storage = storage;
         this.entityClass = entityClass;
     }
 
@@ -88,7 +89,6 @@ public class MemoryRepository<I, E extends JagroskEntity<I>> implements Reposito
 
     @Override
     public void close() {
-        this.storage.clear();
     }
 
     @Override

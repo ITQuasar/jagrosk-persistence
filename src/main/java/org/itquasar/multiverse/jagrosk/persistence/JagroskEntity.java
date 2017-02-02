@@ -1,5 +1,6 @@
 package org.itquasar.multiverse.jagrosk.persistence;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -23,7 +24,7 @@ import java.util.Objects;
  * }
  * ```
  */
-public interface JagroskEntity<I> {
+public interface JagroskEntity<I> extends Serializable {
 
     I getId();
 

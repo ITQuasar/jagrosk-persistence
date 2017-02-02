@@ -17,7 +17,7 @@ public class PersistenceTest {
         persistenceTest(JagroskPersistenceFactory.create(JagroskPersistenceType.JPA));
     }
 
-
+    @Test
     public void memoryPersistenceTest() {
         System.out.println("Memory persistence test");
         persistenceTest(JagroskPersistenceFactory.create(JagroskPersistenceType.MEMORY));
@@ -41,6 +41,7 @@ public class PersistenceTest {
             }
             FooBarEntity foo = foos.get(0);
             foo.setFooBar("foo bar");
+            repo.update(foo);
             return foo;
         });
 

@@ -66,7 +66,6 @@
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>javax.persistence</artifactId>
             <scope>provided</scope>
-            <optional>true</optional>
         </dependency>
 
         <dependency>
@@ -96,6 +95,13 @@
             <artifactId>h2</artifactId>
             <version>1.4.193</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mapdb</groupId>
+            <artifactId>mapdb</artifactId>
+            <version>3.0.3</version>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 

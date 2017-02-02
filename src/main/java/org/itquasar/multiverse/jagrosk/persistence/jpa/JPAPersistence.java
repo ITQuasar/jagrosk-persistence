@@ -70,6 +70,10 @@ public class JPAPersistence implements JagroskPersistence, AutoCloseable {
         emf.close();
     }
 
+    public <I, E extends JagroskEntity<I>> Repository<I, E> repository(EntityManager entityManager, Class<E> entityClass) {
+        return new JPARepository<>(entityManager, entityClass);
+    }
+
 
     @Override
     public <I, E extends JagroskEntity<I>> Repository<I, E> repository(Class<E> entityClass) {
@@ -85,4 +89,5 @@ public class JPAPersistence implements JagroskPersistence, AutoCloseable {
     public <T> Transaction<T> transaction() {
         return new JPATransaction(this);
     }
+
 }

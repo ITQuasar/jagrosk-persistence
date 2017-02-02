@@ -28,6 +28,8 @@ org.itquasar.multiverse.jagrosk.persistence.jpa.JPAQuery ..> org.itquasar.multiv
 org.itquasar.multiverse.jagrosk.persistence.jpa.JPARepository ..> org.itquasar.multiverse.jagrosk.persistence.JagroskEntity
 org.itquasar.multiverse.jagrosk.persistence.jpa.JPARepository --|> org.itquasar.multiverse.jagrosk.persistence.Repository
 org.itquasar.multiverse.jagrosk.persistence.jpa.JPATransaction --|> org.itquasar.multiverse.jagrosk.persistence.Transaction
+org.itquasar.multiverse.jagrosk.persistence.jpa.JPATransaction ..> org.itquasar.multiverse.jagrosk.persistence.JagroskEntity
+org.itquasar.multiverse.jagrosk.persistence.jpa.JPATransaction ..> org.itquasar.multiverse.jagrosk.persistence.Repository
 org.itquasar.multiverse.jagrosk.persistence.mem.MemoryPersistence ..> org.itquasar.multiverse.jagrosk.persistence.Transaction
 org.itquasar.multiverse.jagrosk.persistence.mem.MemoryPersistence ..> org.itquasar.multiverse.jagrosk.persistence.JagroskEntity
 org.itquasar.multiverse.jagrosk.persistence.mem.MemoryPersistence --|> org.itquasar.multiverse.jagrosk.persistence.JagroskPersistence

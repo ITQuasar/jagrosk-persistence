@@ -9,6 +9,7 @@ import org.itquasar.multiverse.jagrosk.persistence.Transaction;
  * Created by guilherme on 29/01/17.
  */
 public class MemoryPersistence implements JagroskPersistence {
+
     @Override
     public <I, E extends JagroskEntity<I>> Repository<I, E> repository(Class<E> entityClass) {
         return new MemoryRepository<>(entityClass);
@@ -17,6 +18,13 @@ public class MemoryPersistence implements JagroskPersistence {
     @Override
     public <T> Transaction<T> transaction() {
         return new Transaction<T>(this) {
+
+            private final RepositoryProvider repositoryProvider = new RepositoryProvider() {
+                @Override
+                public <I, E extends JagroskEntity<I>> Repository<I, E> get(Class<E> entityClass) {
+                    return getPersistence().repository(entityClass, false);
+                }
+            };
 
             private boolean isActive = false;
 
@@ -43,6 +51,11 @@ public class MemoryPersistence implements JagroskPersistence {
             @Override
             protected void finalizeResources() {
                 this.isActive = false;
+            }
+
+            @Override
+            protected RepositoryProvider getRepositoryProvider() {
+                return repositoryProvider;
             }
         };
     }

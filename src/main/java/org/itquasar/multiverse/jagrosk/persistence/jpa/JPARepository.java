@@ -55,9 +55,9 @@ public class JPARepository<I, E extends JagroskEntity<I>> implements Repository<
 
     @Override
     public Optional<E> update(E entity) {
-        this.entityManager.merge(entity);
-        this.entityManager.persist(entity);
-        return Optional.ofNullable(entity);
+        return Optional.ofNullable(
+                this.entityManager.merge(entity)
+        );
     }
 
     @Override

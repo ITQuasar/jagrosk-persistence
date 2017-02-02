@@ -7,6 +7,7 @@
     <groupId>org.itquasar.multiverse.jagrosk</groupId>
     <artifactId>jagrosk-persistence</artifactId>
     <version>0.1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -20,6 +21,9 @@
         <slf4j.version>1.7.21</slf4j.version>
 
         <junit.version>5.0.0-M3</junit.version>
+        <junit.jupiter.version>${junit.version}</junit.jupiter.version>
+        <junit.platform.version>1.0.0-M3</junit.platform.version>
+
         <hamcrest.version>2.0.0.0</hamcrest.version>
     </properties>
 
@@ -44,10 +48,11 @@
     </dependencyManagement>
 
     <dependencies>
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>${junit.version}</version>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.jupiter.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -61,6 +66,7 @@
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>javax.persistence</artifactId>
             <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
@@ -72,18 +78,17 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>${slf4j.version}</version>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <scope>provided</scope>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-jpamodelgen</artifactId>
-            <scope>provided</scope>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -96,6 +101,23 @@
 
     <build>
         <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>generate-sources</id>
+                        <phase>initialize</phase>
+                        <configuration>
+                            <tasks>
+                                <mkdir dir="${project.basedir}/src/main/uml"/>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <!-- Generate UML diagrams in javadoc using doclet: mvn javadoc:javadoc -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -127,19 +149,11 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.5.0</version>
-                <configuration>
-                    <includePluginDependencies>true</includePluginDependencies>
-                </configuration>
                 <dependencies>
                     <dependency>
                         <groupId>net.sourceforge.plantuml-depend</groupId>
                         <artifactId>plantuml-dependency-cli</artifactId>
                         <version>1.4.0</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>net.sourceforge.plantuml</groupId>
-                        <artifactId>plantuml</artifactId>
-                        <version>8054</version>
                     </dependency>
                 </dependencies>
                 <executions>
@@ -150,6 +164,7 @@
                             <goal>java</goal>
                         </goals>
                         <configuration>
+                            <includePluginDependencies>true</includePluginDependencies>
                             <mainClass>net.sourceforge.plantumldependency.cli.main.program.PlantUMLDependencyProgram</mainClass>
                             <arguments>
                                 <argument>-o</argument>
@@ -161,34 +176,29 @@
                             </arguments>
                         </configuration>
                     </execution>
-                    <execution>
-                        <id>plantuml</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                        <configuration>
-                            <mainClass>net.sourceforge.plantuml.Run</mainClass>
-                            <arguments>
-                                <argument>${project.basedir}/src/main/uml/*uml</argument>
-                                <argument>-tsvg</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
                 </executions>
             </plugin>
             <plugin>
                 <groupId>com.github.jeluard</groupId>
                 <artifactId>plantuml-maven-plugin</artifactId>
                 <version>1.2</version>
+                <executions>
+                    <execution>
+                        <id>plantuml</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
                     <sourceFiles>
-                        <directory>${basedir}/src/main/plantuml</directory>
+                        <directory>${basedir}/src/main/uml</directory>
                         <includes>
                             <include>**/*.puml</include>
                         </includes>
                     </sourceFiles>
-                    <outputDirectory>${basedir}/target/plantuml</outputDirectory>
+                    <outputDirectory>${basedir}/src/main/uml</outputDirectory>
                     <outputInSourceDirectory>false</outputInSourceDirectory>
                     <format>svg</format>
                     <verbose>true</verbose>
@@ -197,7 +207,7 @@
                     <dependency>
                         <groupId>net.sourceforge.plantuml</groupId>
                         <artifactId>plantuml</artifactId>
-                        <version>8053</version>
+                        <version>8054</version>
                     </dependency>
                 </dependencies>
             </plugin>
@@ -207,13 +217,8 @@
                 <dependencies>
                     <dependency>
                         <groupId>org.junit.platform</groupId>
-                        <artifactId>junit-platform-surefire-persistence</artifactId>
-                        <version>1.0.0-M3</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.junit.jupiter</groupId>
-                        <artifactId>junit-jupiter-engine</artifactId>
-                        <version>5.0.0-M3</version>
+                        <artifactId>junit-platform-surefire-provider</artifactId>
+                        <version>${junit.platform.version}</version>
                     </dependency>
                 </dependencies>
             </plugin>

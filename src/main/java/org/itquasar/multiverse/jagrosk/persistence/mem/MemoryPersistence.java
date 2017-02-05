@@ -29,4 +29,8 @@ public class MemoryPersistence implements JagroskPersistence {
         return new MemoryTransaction<>(db, this);
     }
 
+    @Override
+    public void close() {
+        db.close();
+    }
 }

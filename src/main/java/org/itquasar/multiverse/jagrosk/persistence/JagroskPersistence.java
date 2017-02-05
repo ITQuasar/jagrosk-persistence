@@ -5,7 +5,7 @@ import java.util.Optional;
 /**
  * Created by guilherme on 29/01/17.
  */
-public interface JagroskPersistence {
+public interface JagroskPersistence extends AutoCloseable {
 
     <I, E extends JagroskEntity<I>> Repository<I, E> repository(Class<E> entityClass);
 
@@ -26,4 +26,7 @@ public interface JagroskPersistence {
     default void transaction(Transaction.Statement transactionStatements) {
         this.transaction().execute(transactionStatements);
     }
+
+    @Override
+    void close();
 }

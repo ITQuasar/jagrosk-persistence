@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -24,10 +25,25 @@ public class JPAPersistence implements JagroskPersistence, AutoCloseable {
 
     private static final Map<String, EntityManagerFactory> FACTORIES =
             new ConcurrentHashMap<String, EntityManagerFactory>();
+
+
+    static {
+        Runtime.getRuntime().addShutdownHook(new Thread(
+                () -> FACTORIES.keySet().forEach(
+                        (name) -> {
+                            EntityManagerFactory emf = FACTORIES.remove(name);
+                            LOGGER.warn("Closing {} {}", emf.getClass().getSimpleName(), name);
+                            emf.close();
+                        }
+                )
+        ));
+    }
+
     // ---------------------------------------- //
     private final String puName;
 
     private JPAPersistence(String puName) {
+        Objects.requireNonNull(puName, "PU Name must be NOT null");
         this.puName = puName;
     }
 
@@ -52,18 +68,11 @@ public class JPAPersistence implements JagroskPersistence, AutoCloseable {
         return emf;
     }
 
-    public static void closeAll() {
-        for (String name : FACTORIES.keySet()) {
-            EntityManagerFactory emf = FACTORIES.remove(name);
-            LOGGER.warn("Closing {} {}", emf.getClass().getSimpleName(), name);
-            emf.close();
-        }
-    }
-
     public EntityManager getEntityManager() {
         return getEntityManager(this.puName);
     }
 
+    @Override
     public void close() {
         EntityManagerFactory emf = this.FACTORIES.remove(this.puName);
         LOGGER.warn("Closing {} {}", emf.getClass().getSimpleName(), this.puName);

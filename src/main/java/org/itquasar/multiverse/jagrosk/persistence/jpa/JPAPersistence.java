@@ -60,12 +60,10 @@ public class JPAPersistence implements JagroskPersistence, AutoCloseable {
     }
 
     private static EntityManagerFactory getEntityManagerFactory(String name) {
-        EntityManagerFactory emf = FACTORIES.get(name);
-        if (emf == null) {
-            emf = javax.persistence.Persistence.createEntityManagerFactory(name);
-            FACTORIES.put(name, emf);
-        }
-        return emf;
+        return FACTORIES.computeIfAbsent(
+                name,
+                (n) -> javax.persistence.Persistence.createEntityManagerFactory(name)
+        );
     }
 
     public EntityManager getEntityManager() {

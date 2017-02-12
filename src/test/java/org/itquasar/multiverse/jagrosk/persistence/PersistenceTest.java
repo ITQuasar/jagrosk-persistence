@@ -66,7 +66,7 @@ public class PersistenceTest {
         );
 
         Optional<FooBarEntity> opt = persistence.transaction((repoProvider) -> {
-            Repository<Integer, FooBarEntity> repo = repoProvider.get(FooBarEntity.class);
+            Repository<Integer, FooBarEntity> repo = repoProvider.repository(FooBarEntity.class);
             List<FooBarEntity> foos = repo.findBy("id", 1);
             if (foos.isEmpty()) {
                 Assertions.fail("No entity found, but it should be there!");

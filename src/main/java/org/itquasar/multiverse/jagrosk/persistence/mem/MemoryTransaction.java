@@ -15,7 +15,7 @@ class MemoryTransaction<T> extends Transaction<T> {
     private final DB db;
     private final RepositoryProvider repositoryProvider = new RepositoryProvider() {
         @Override
-        public <I, E extends JagroskEntity<I>> Repository<I, E> get(Class<E> entityClass) {
+        public <I, E extends JagroskEntity<I>> Repository<I, E> repository(Class<E> entityClass) {
             return getPersistence().repository(entityClass, false);
         }
     };

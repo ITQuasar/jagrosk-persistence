@@ -1,5 +1,4 @@
 @startuml
-abstract class org.itquasar.multiverse.jagrosk.persistence.FooBarEntity_
 abstract class org.itquasar.multiverse.jagrosk.persistence.Transaction
 class org.itquasar.multiverse.jagrosk.persistence.JagroskPersistenceFactory
 class org.itquasar.multiverse.jagrosk.persistence.OneShotRepository

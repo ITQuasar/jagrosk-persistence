@@ -97,7 +97,7 @@ public abstract class Transaction<R> {
     @FunctionalInterface
     public interface RepositoryProvider {
 
-        <I, E extends JagroskEntity<I>> Repository<I, E> get(Class<E> entityClass);
+        <I, E extends JagroskEntity<I>> Repository<I, E> repository(Class<E> entityClass);
     }
 
     @FunctionalInterface

@@ -23,7 +23,7 @@ public class JPATransaction<R> extends Transaction<R> {
         this.transaction = this.entityManager.getTransaction();
         this.repositoryProvider = new RepositoryProvider() {
             @Override
-            public <I, E extends JagroskEntity<I>> Repository<I, E> get(Class<E> entityClass) {
+            public <I, E extends JagroskEntity<I>> Repository<I, E> repository(Class<E> entityClass) {
                 return persistence.repository(entityManager, entityClass);
             }
         };

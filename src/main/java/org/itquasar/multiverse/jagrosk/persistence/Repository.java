@@ -18,9 +18,13 @@ public interface Repository<I, E extends JagroskEntity<I>> extends AutoCloseable
 
     Optional<E> remove(E entity);
 
+    Optional<E> remove(I id);
+
     default Optional<E> delete(E entity) {
         return remove(entity);
     }
+
+    default Optional<E> delete(I id){return delete(id);}
 
     List<E> listAll();
 

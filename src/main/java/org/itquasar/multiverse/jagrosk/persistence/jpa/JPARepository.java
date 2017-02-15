@@ -54,6 +54,15 @@ public class JPARepository<I, E extends JagroskEntity<I>> implements Repository<
     }
 
     @Override
+    public Optional<E> remove(I id) {
+        Optional<E> entity = this.findById(id);
+        if(entity.isPresent()) {
+            this.entityManager.remove(entity.get());
+        }
+        return entity;
+    }
+
+    @Override
     public Optional<E> update(E entity) {
         return Optional.ofNullable(
                 this.entityManager.merge(entity)

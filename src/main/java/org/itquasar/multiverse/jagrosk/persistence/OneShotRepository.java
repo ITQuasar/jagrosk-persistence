@@ -32,6 +32,11 @@ public class OneShotRepository<I, E extends JagroskEntity<I>> implements Reposit
     }
 
     @Override
+    public Optional<E> remove(I id) {
+        return performAndReturn(()->this.repository.remove(id));
+    }
+
+    @Override
     public Optional<E> update(E entity) {
         return performAndReturn(() -> this.repository.update(entity));
     }

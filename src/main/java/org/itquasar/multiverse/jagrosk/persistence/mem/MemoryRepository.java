@@ -37,6 +37,11 @@ public class MemoryRepository<I, E extends JagroskEntity<I>> implements Reposito
     public Optional<E> remove(E entity) {
         Objects.requireNonNull(entity, "Entity must be not null to be removed from persistence.");
         I id = entity.getId();
+        return this.remove(id);
+    }
+
+    @Override
+    public Optional<E> remove(I id){
         return Optional.ofNullable(
                 this.storage.remove(this.storage.get(id))
         );

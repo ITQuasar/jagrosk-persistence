@@ -32,10 +32,12 @@ public class JPAOneShotRepository<I, E extends JagroskEntity<I>> extends OneShot
             result = action.get();
             trx.commit();
         } catch (Exception ex) {
+            result = null;
             if (trx.isActive()) {
                 trx.rollback();
             }
             LOGGER.error("Couldn't perform JPA Transaction.", ex);
+
         } finally {
             this.close();
         }

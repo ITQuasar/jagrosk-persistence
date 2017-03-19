@@ -37,6 +37,7 @@ public class PersistenceTest {
     }
 
     @Test
+    @Disabled
     public void memoryPersistenceCommitTest() {
         System.out.println("Memory persistence test");
         persistenceTest(JagroskPersistenceFactory.create(JagroskPersistenceType.MEMORY), false);

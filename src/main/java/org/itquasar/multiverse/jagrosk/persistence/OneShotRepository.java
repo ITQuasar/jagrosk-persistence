@@ -1,5 +1,6 @@
 package org.itquasar.multiverse.jagrosk.persistence;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -65,6 +66,11 @@ public class OneShotRepository<I, E extends JagroskEntity<I>> implements Reposit
     @Override
     public List<E> findBy(String propertyName, Object value) {
         return performAndReturnList(() -> this.repository.findBy(propertyName, value));
+    }
+
+    @Override
+    public List<E> findByIn(String propertyName, Collection<?> values) {
+        return performAndReturnList(() -> this.repository.findByIn(propertyName, values));
     }
 
     @Override

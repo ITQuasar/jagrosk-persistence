@@ -65,6 +65,11 @@ public class MemoryRepository<I, E extends JagroskEntity<I>> implements Reposito
     }
 
     @Override
+    public List<E> findByIn(String propertyName, Collection<?> values) {
+        throw  new UnsupportedOperationException("Not implemented!");
+    }
+
+    @Override
     public List<E> findBy(String propertyName, Object value) {
         Optional<Method> reader = null;
         try {

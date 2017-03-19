@@ -4,8 +4,10 @@ import org.itquasar.multiverse.jagrosk.persistence.JagroskEntity;
 import org.itquasar.multiverse.jagrosk.persistence.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Path;
-import javax.persistence.metamodel.SingularAttribute;
+import javax.persistence.metamodel.*;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -19,14 +21,13 @@ public class JPARepository<I, E extends JagroskEntity<I>> implements Repository<
     private final Class<E> entityClass;
 
 
-    private static <E> List<E> listOrEmpty(List<E> list) {
-        return list != null ? list : Collections.emptyList();
-    }
-
-
     public JPARepository(EntityManager entityManager, Class<E> entityClass) {
         this.entityManager = entityManager;
         this.entityClass = entityClass;
+    }
+
+    private static <E> List<E> listOrEmpty(List<E> list) {
+        return list != null ? list : Collections.emptyList();
     }
 
     public EntityManager getEntityManager() {
@@ -37,7 +38,7 @@ public class JPARepository<I, E extends JagroskEntity<I>> implements Repository<
         return entityClass;
     }
 
-    private JPAQuery<I, E> createJPAQuery() {
+    public JPAQuery<I, E> createJPAQuery() {
         return new JPAQuery<>(this.entityManager, this.entityClass);
     }
 
@@ -56,7 +57,7 @@ public class JPARepository<I, E extends JagroskEntity<I>> implements Repository<
     @Override
     public Optional<E> remove(I id) {
         Optional<E> entity = this.findById(id);
-        if(entity.isPresent()) {
+        if (entity.isPresent()) {
             this.entityManager.remove(entity.get());
         }
         return entity;
@@ -97,6 +98,40 @@ public class JPARepository<I, E extends JagroskEntity<I>> implements Repository<
                 jpaQuery.builder().equal(
                         path, value
                 )
+        );
+        return listOrEmpty(jpaQuery.toTypedQuery().getResultList());
+    }
+
+    @Override
+    public List<E> findByIn(String propertyName, Collection<?> values) {
+        JPAQuery jpaQuery = createJPAQuery();
+        return this.findByIn(jpaQuery, jpaQuery.root().get(propertyName), values);
+    }
+
+
+    public List<E> findByIn(CollectionAttribute collectionAttribute, Collection<?> values) {
+        JPAQuery jpaQuery = createJPAQuery();
+        return this.findByIn(jpaQuery, jpaQuery.root().join(collectionAttribute), values);
+    }
+
+    public List<E> findByIn(SetAttribute setAttribute, Collection<?> values) {
+        JPAQuery jpaQuery = createJPAQuery();
+        return this.findByIn(jpaQuery, jpaQuery.root().join(setAttribute), values);
+    }
+
+    public List<E> findByIn(ListAttribute listAttribute, Collection<?> values) {
+        JPAQuery jpaQuery = createJPAQuery();
+        return this.findByIn(jpaQuery, jpaQuery.root().join(listAttribute), values);
+    }
+
+    public List<E> findByIn(MapAttribute mapAttribute, Collection<?> values) {
+        JPAQuery jpaQuery = createJPAQuery();
+        return this.findByIn(jpaQuery, jpaQuery.root().join(mapAttribute), values);
+    }
+
+    private List<E> findByIn(JPAQuery jpaQuery, Expression expression, Collection<?> values) {
+        jpaQuery.criteria().where(
+                expression.in(values)
         );
         return listOrEmpty(jpaQuery.toTypedQuery().getResultList());
     }

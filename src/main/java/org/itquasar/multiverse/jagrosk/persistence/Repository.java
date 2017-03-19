@@ -1,5 +1,6 @@
 package org.itquasar.multiverse.jagrosk.persistence;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +32,8 @@ public interface Repository<I, E extends JagroskEntity<I>> extends AutoCloseable
     Optional<E> findById(I id);
 
     List<E> findBy(String propertyName, Object value);
+
+    List<E> findByIn(String propertyName, Collection<?> values);
 
     /**
      * API not defined
